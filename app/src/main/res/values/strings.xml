@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Space Info</string>
+    <string name="connection_error">Connection error</string>
+    <string name="picture_of_a_day">Picture of a day</string>
+    <string name="space_weather">Space weather</string>
+    <string name="_2_days_before">2 days before</string>
+    <string name="yesterday">yesterday</string>
+    <string name="today">today</string>
+    <string name="share">share</string>
+    <string name="screen_error_message">Cannot show content</string>
+</resources>
