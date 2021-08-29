@@ -45,7 +45,7 @@ class PictureOfADayViewModel @Inject constructor(
 
     init {
         _state.value = PictureDateState.LOADING
-        getPictureOfADay(dateFormat.format(Date()))
+        loadPictureOfADay(dateFormat.format(Date()))
     }
 
     fun onAnotherDatePictureClicked(choice: PictureDateChoice) {
@@ -55,11 +55,11 @@ class PictureOfADayViewModel @Inject constructor(
 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, choice.days)
-        getPictureOfADay(dateFormat.format(calendar.time))
+        loadPictureOfADay(dateFormat.format(calendar.time))
         currentDate = choice
     }
 
-    private fun getPictureOfADay(date: String) {
+    private fun loadPictureOfADay(date: String) {
         viewModelScope.launch {
             when (val result = spaceRepository.getPictureOfADay(date)) {
                 is ResultWrapper.Success -> {
