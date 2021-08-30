@@ -29,7 +29,7 @@ data class PictureOfADayEntity(
 
     @ColumnInfo(name = "hdurl")
     @SerializedName("hdurl")
-    val mediaPathHD: String?,
+    val mediaPathHd: String?,
 
     @ColumnInfo(name = "media_type")
     @SerializedName("media_type")

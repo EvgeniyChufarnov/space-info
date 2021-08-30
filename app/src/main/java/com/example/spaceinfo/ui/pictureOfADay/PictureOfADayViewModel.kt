@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinfo.domain.repository.SpaceRepository
 import com.example.spaceinfo.domain.data.ResultWrapper
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
+import com.example.spaceinfo.domain.repository.SpaceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 private const val DATE_FORMAT_PATTEN = "yyyy-MM-dd"
 
-enum class PictureDateState {
+enum class PictureOfADayScreenState {
     SHOW_PICTURE, SHOW_VIDEO, LOADING, ERROR
 }
 
@@ -34,8 +34,8 @@ class PictureOfADayViewModel @Inject constructor(
     private val _picture = MutableLiveData<PictureOfADayEntity>()
     val picture: LiveData<PictureOfADayEntity> = _picture
 
-    private val _state = MutableLiveData<PictureDateState>()
-    val state: LiveData<PictureDateState> = _state
+    private val _state = MutableLiveData<PictureOfADayScreenState>()
+    val state: LiveData<PictureOfADayScreenState> = _state
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
@@ -44,14 +44,14 @@ class PictureOfADayViewModel @Inject constructor(
     val shareEvent: LiveData<PictureOfADayEntity?> = _shareEvent
 
     init {
-        _state.value = PictureDateState.LOADING
+        _state.value = PictureOfADayScreenState.LOADING
         loadPictureOfADay(dateFormat.format(Date()))
     }
 
     fun onAnotherDatePictureClicked(choice: PictureDateChoice) {
         if (choice == currentDate) return
 
-        _state.value = PictureDateState.LOADING
+        _state.value = PictureOfADayScreenState.LOADING
 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, choice.days)
@@ -66,27 +66,27 @@ class PictureOfADayViewModel @Inject constructor(
                     _picture.value = result.value!!
 
                     if (result.value.isVideo()) {
-                        _state.value = PictureDateState.SHOW_VIDEO
+                        _state.value = PictureOfADayScreenState.SHOW_VIDEO
                     }
                 }
                 is ResultWrapper.GenericError -> {
                     _errorMessage.value = result.error?.message
-                    _state.value = PictureDateState.ERROR
+                    _state.value = PictureOfADayScreenState.ERROR
                 }
                 is ResultWrapper.NetworkError -> {
                     _errorMessage.value = null
-                    _state.value = PictureDateState.ERROR
+                    _state.value = PictureOfADayScreenState.ERROR
                 }
             }
         }
     }
 
     fun onPictureReady() {
-        _state.value = PictureDateState.SHOW_PICTURE
+        _state.value = PictureOfADayScreenState.SHOW_PICTURE
     }
 
     fun onShareClicked() {
-        if (state.value != PictureDateState.ERROR && state.value != PictureDateState.LOADING) {
+        if (state.value != PictureOfADayScreenState.ERROR && state.value != PictureOfADayScreenState.LOADING) {
             _shareEvent.value = picture.value
         } else {
             _errorMessage.value = null

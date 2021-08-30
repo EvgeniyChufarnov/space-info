@@ -21,17 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val SHARE_INTENT_TYPE = "text/plain"
 
 @AndroidEntryPoint
-class PictureOfADayFragment : Fragment() {
+class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
     private val binding: PictureOfADayFragmentBinding by viewBinding(PictureOfADayFragmentBinding::bind)
     private val viewModel: PictureOfADayViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.picture_of_a_day_fragment, container, false)
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.picture_of_a_day_menu, menu)
@@ -65,21 +57,21 @@ class PictureOfADayFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner, { state ->
             when (state) {
-                PictureDateState.LOADING -> {
+                PictureOfADayScreenState.LOADING -> {
                     binding.contentLayout.isVisible = false
                     binding.errorTextView.isVisible = false
                 }
-                PictureDateState.SHOW_PICTURE -> {
+                PictureOfADayScreenState.SHOW_PICTURE -> {
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = true
                 }
-                PictureDateState.SHOW_VIDEO -> {
+                PictureOfADayScreenState.SHOW_VIDEO -> {
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = false
                 }
-                PictureDateState.ERROR -> {
+                PictureOfADayScreenState.ERROR -> {
                     binding.contentLayout.isVisible = false
                     binding.errorTextView.isVisible = true
                 }
