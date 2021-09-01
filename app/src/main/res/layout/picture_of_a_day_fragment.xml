@@ -57,6 +57,7 @@
                     android:id="@+id/title_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/space_font"
                     android:textSize="@dimen/title_text_size" />
 
                 <ImageView
@@ -81,5 +82,13 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/screen_error_message"
-        android:textSize="@dimen/content_text_size" />
+        android:textSize="@dimen/content_text_size"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/loading_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </FrameLayout>

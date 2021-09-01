@@ -26,7 +26,7 @@ class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
     private val viewModel: PictureOfADayViewModel by viewModels()
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.picture_of_a_day_menu, menu)
+        inflater.inflate(R.menu.menu_picture_of_a_day, menu)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,22 +58,31 @@ class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
         viewModel.state.observe(viewLifecycleOwner, { state ->
             when (state) {
                 PictureOfADayScreenState.LOADING -> {
+                    binding.loadingProgressBar.isVisible = true
                     binding.contentLayout.isVisible = false
                     binding.errorTextView.isVisible = false
                 }
                 PictureOfADayScreenState.SHOW_PICTURE -> {
+                    binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = true
                 }
                 PictureOfADayScreenState.SHOW_VIDEO -> {
+                    binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = false
                 }
                 PictureOfADayScreenState.ERROR -> {
+                    binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = false
                     binding.errorTextView.isVisible = true
+                }
+                PictureOfADayScreenState.IDLE -> {
+                    binding.loadingProgressBar.isVisible = false
+                    binding.contentLayout.isVisible = false
+                    binding.errorTextView.isVisible = false
                 }
                 else -> {
                     throw RuntimeException("Unknown picture of a day state")

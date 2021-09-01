@@ -8,6 +8,7 @@ import com.example.spaceinfo.domain.data.ResultWrapper
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
 import com.example.spaceinfo.domain.repository.SpaceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -15,9 +16,10 @@ import java.util.*
 import javax.inject.Inject
 
 private const val DATE_FORMAT_PATTEN = "yyyy-MM-dd"
+private const val LOADING_BAR_DELAY = 300L
 
 enum class PictureOfADayScreenState {
-    SHOW_PICTURE, SHOW_VIDEO, LOADING, ERROR
+    SHOW_PICTURE, SHOW_VIDEO, LOADING, ERROR, IDLE
 }
 
 enum class PictureDateChoice(val days: Int) {
@@ -44,19 +46,22 @@ class PictureOfADayViewModel @Inject constructor(
     val shareEvent: LiveData<PictureOfADayEntity?> = _shareEvent
 
     init {
-        _state.value = PictureOfADayScreenState.LOADING
+        _state.value = PictureOfADayScreenState.IDLE
         loadPictureOfADay(dateFormat.format(Date()))
+        delayToShowProgressBar()
     }
 
     fun onAnotherDatePictureClicked(choice: PictureDateChoice) {
         if (choice == currentDate) return
 
-        _state.value = PictureOfADayScreenState.LOADING
+        _state.value = PictureOfADayScreenState.IDLE
 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, choice.days)
         loadPictureOfADay(dateFormat.format(calendar.time))
         currentDate = choice
+
+        delayToShowProgressBar()
     }
 
     private fun loadPictureOfADay(date: String) {
@@ -95,5 +100,15 @@ class PictureOfADayViewModel @Inject constructor(
 
     fun onShareFinished() {
         _shareEvent.value = null
+    }
+
+    private fun delayToShowProgressBar() {
+        viewModelScope.launch {
+            delay(LOADING_BAR_DELAY)
+
+            if (state.value == PictureOfADayScreenState.IDLE) {
+                _state.value = PictureOfADayScreenState.LOADING
+            }
+        }
     }
 }

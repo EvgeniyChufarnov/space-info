@@ -1,8 +1,12 @@
 package com.example.spaceinfo.ui
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,17 +16,30 @@ import com.example.spaceinfo.ui.pictureOfADay.PictureOfADayFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
+
+private const val NIGHT_THEME_PREFERENCES_KEY = "night theme preferences"
+private const val NIGHT_THEME_KEY = "night theme"
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenuItemClickListener {
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
+    private var isDarkTheme: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        isDarkTheme = isDarkTheme()
+        applyTheme()
 
         setSupportActionBar(binding.bottomAppBar)
         initBottomAppBar()
 
         navigateTo(PictureOfADayFragment())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        return true
     }
 
     private fun initBottomAppBar() {
@@ -75,5 +92,59 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container_layout, fragment)
             .commit()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.settings_item -> {
+            showSettingsMenu()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSettingsMenu() {
+        PopupMenu(this, binding.bottomAppBar, Gravity.END).apply {
+            setOnMenuItemClickListener(this@MainActivity)
+            inflate(R.menu.menu_settings)
+            menu.findItem(R.id.dark_theme_item).isChecked = isDarkTheme
+            show()
+        }
+    }
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.dark_theme_item -> {
+                changeTheme()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun changeTheme() {
+        isDarkTheme = !isDarkTheme
+
+        applyTheme()
+        saveThemeToPreferences()
+    }
+
+    private fun isDarkTheme(): Boolean {
+        val sharedPref = getSharedPreferences(NIGHT_THEME_PREFERENCES_KEY, MODE_PRIVATE)
+        return sharedPref.getBoolean(NIGHT_THEME_KEY, false)
+    }
+
+    private fun saveThemeToPreferences() {
+        val sharedPref = getSharedPreferences(NIGHT_THEME_PREFERENCES_KEY, MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putBoolean(NIGHT_THEME_KEY, isDarkTheme)
+        editor.apply()
+    }
+
+    private fun applyTheme() {
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 }
