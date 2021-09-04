@@ -14,15 +14,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.spaceinfo.R
-import com.example.spaceinfo.databinding.PictureOfADayFragmentBinding
+import com.example.spaceinfo.databinding.FragmentPictureOfADayBinding
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val SHARE_INTENT_TYPE = "text/plain"
 
 @AndroidEntryPoint
-class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
-    private val binding: PictureOfADayFragmentBinding by viewBinding(PictureOfADayFragmentBinding::bind)
+class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
+    private val binding: FragmentPictureOfADayBinding by viewBinding(FragmentPictureOfADayBinding::bind)
     private val viewModel: PictureOfADayViewModel by viewModels()
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -36,8 +36,8 @@ class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
             when {
                 it.isImage() -> loadImage(it)
                 it.isVideo() -> {
+                    binding.linkToAVideoImageView.text = it.mediaPath
                     setDescription(it)
-                    //todo not yet implemented
                 }
             }
         })
@@ -66,6 +66,7 @@ class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
                     binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
+                    binding.linkToAVideoImageView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = true
                 }
                 PictureOfADayScreenState.SHOW_VIDEO -> {
@@ -73,6 +74,7 @@ class PictureOfADayFragment : Fragment(R.layout.picture_of_a_day_fragment) {
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = false
+                    binding.linkToAVideoImageView.isVisible = true
                 }
                 PictureOfADayScreenState.ERROR -> {
                     binding.loadingProgressBar.isVisible = false

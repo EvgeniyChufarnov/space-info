@@ -3,7 +3,10 @@ package com.example.spaceinfo.di
 import com.example.spaceinfo.domain.repository.SpaceRepository
 import com.example.spaceinfo.domain.repository.impls.SpaceRepositoryImpl
 import com.example.spaceinfo.domain.data.local.PictureOfADayDao
+import com.example.spaceinfo.domain.data.remote.MarsPicturesApi
 import com.example.spaceinfo.domain.data.remote.SpaceApi
+import com.example.spaceinfo.domain.repository.MarsPicturesRepository
+import com.example.spaceinfo.domain.repository.impls.MarsPicturesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,8 +32,13 @@ object RepositoriesModule {
 
     @Provides
     @Singleton
-    fun provideSpaceService(retrofit: Retrofit): SpaceApi =
+    fun provideSpaceApi(retrofit: Retrofit): SpaceApi =
         retrofit.create(SpaceApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMarsPicturesApi(retrofit: Retrofit): MarsPicturesApi =
+        retrofit.create(MarsPicturesApi::class.java)
 
     @Provides
     @Singleton
@@ -39,4 +47,11 @@ object RepositoriesModule {
         pictureOfADayDao: PictureOfADayDao
     ): SpaceRepository =
         SpaceRepositoryImpl(spaceApi, pictureOfADayDao)
+
+    @Provides
+    @Singleton
+    fun provideMarsPicturesRepository(
+        marsPicturesApi: MarsPicturesApi,
+    ): MarsPicturesRepository =
+        MarsPicturesRepositoryImpl(marsPicturesApi)
 }
