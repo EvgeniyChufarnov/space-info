@@ -12,9 +12,9 @@
             android:title="@string/picture_of_a_day" />
 
         <item
-            android:id="@+id/space_weather_item"
-            android:icon="@drawable/ic_space_weather"
-            android:title="@string/space_weather" />
+            android:id="@+id/mars_pictures_item"
+            android:icon="@drawable/ic_mars_pictures"
+            android:title="@string/pictures_from_mars" />
     </group>
 
 </menu>

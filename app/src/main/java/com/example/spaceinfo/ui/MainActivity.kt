@@ -13,9 +13,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.ActivityMainBinding
 import com.example.spaceinfo.ui.pictureOfADay.PictureOfADayFragment
+import com.example.spaceinfo.ui.picturesFromMarsContainer.PicturesFromMarsContainerFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
-
 
 private const val NIGHT_THEME_PREFERENCES_KEY = "night theme preferences"
 private const val NIGHT_THEME_KEY = "night theme"
@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
             R.id.picture_of_a_day_item -> {
                 navigateTo(PictureOfADayFragment())
             }
-            R.id.space_weather_item -> {
-
+            R.id.mars_pictures_item -> {
+                navigateTo(PicturesFromMarsContainerFragment())
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceinfo.LOADING_BAR_DELAY
 import com.example.spaceinfo.domain.data.ResultWrapper
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
 import com.example.spaceinfo.domain.repository.SpaceRepository
@@ -16,7 +17,7 @@ import java.util.*
 import javax.inject.Inject
 
 private const val DATE_FORMAT_PATTEN = "yyyy-MM-dd"
-private const val LOADING_BAR_DELAY = 300L
+private const val US_TIME_ZONE = "America/Los_Angeles"
 
 enum class PictureOfADayScreenState {
     SHOW_PICTURE, SHOW_VIDEO, LOADING, ERROR, IDLE
@@ -30,7 +31,10 @@ enum class PictureDateChoice(val days: Int) {
 class PictureOfADayViewModel @Inject constructor(
     private val spaceRepository: SpaceRepository
 ) : ViewModel() {
-    private val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT_PATTEN, Locale.US)
+    private val dateFormat: DateFormat =
+        SimpleDateFormat(DATE_FORMAT_PATTEN, Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone(US_TIME_ZONE)
+        }
     private var currentDate = PictureDateChoice.TODAY
 
     private val _picture = MutableLiveData<PictureOfADayEntity>()
