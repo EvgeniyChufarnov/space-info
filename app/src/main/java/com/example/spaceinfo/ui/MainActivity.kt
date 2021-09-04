@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        menuInflater.inflate(R.menu.menu_settings, menu)
         return true
     }
 
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     private fun showSettingsMenu() {
         PopupMenu(this, binding.bottomAppBar, Gravity.END).apply {
             setOnMenuItemClickListener(this@MainActivity)
-            inflate(R.menu.menu_settings)
+            inflate(R.menu.menu_settings_options)
             menu.findItem(R.id.dark_theme_item).isChecked = isDarkTheme
             show()
         }
