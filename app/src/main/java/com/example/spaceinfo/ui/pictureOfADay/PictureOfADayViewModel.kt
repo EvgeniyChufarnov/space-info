@@ -30,7 +30,7 @@ enum class PictureDateChoice(val days: Int) {
 class PictureOfADayViewModel @Inject constructor(
     private val spaceRepository: SpaceRepository
 ) : ViewModel() {
-    private val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT_PATTEN, Locale.getDefault())
+    private val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT_PATTEN, Locale.US)
     private var currentDate = PictureDateChoice.TODAY
 
     private val _picture = MutableLiveData<PictureOfADayEntity>()
