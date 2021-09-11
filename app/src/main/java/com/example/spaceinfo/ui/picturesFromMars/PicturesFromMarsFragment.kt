@@ -12,7 +12,7 @@ import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.FragmentPicturesFromMarsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-const val ROVER_NAME_KEY = "rover_name"
+private const val ROVER_NAME_KEY = "rover_name"
 
 @AndroidEntryPoint
 class PicturesFromMarsFragment : Fragment(R.layout.fragment_pictures_from_mars) {

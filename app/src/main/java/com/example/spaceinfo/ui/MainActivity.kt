@@ -1,27 +1,32 @@
 package com.example.spaceinfo.ui
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.ActivityMainBinding
 import com.example.spaceinfo.ui.pictureOfADay.PictureOfADayFragment
+import com.example.spaceinfo.ui.pictureOfADayFullscreen.FullScreenPictureFragment
 import com.example.spaceinfo.ui.picturesFromMarsContainer.PicturesFromMarsContainerFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+
 
 private const val NIGHT_THEME_PREFERENCES_KEY = "night theme preferences"
 private const val NIGHT_THEME_KEY = "night theme"
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenuItemClickListener {
+class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenuItemClickListener,
+    PictureOfADayFragment.Contract, FullScreenPictureFragment.Contract {
+
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
     private var isDarkTheme: Boolean = false
 
@@ -146,5 +151,46 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
         AppCompatDelegate.setDefaultNightMode(
             if (isDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         )
+    }
+
+    override fun showPictureFullScreen(path: String, sharedView: View, sharedViewName: String) {
+        hideSystemUI()
+        binding.bottomAppBar.performHide()
+
+        supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .addSharedElement(sharedView, sharedViewName)
+            .replace(
+                binding.containerLayout.id,
+                FullScreenPictureFragment.getInstance(path)
+            )
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun exitFullScreenState() {
+        showSystemUI()
+        binding.bottomAppBar.performShow()
+    }
+
+    override fun closeFullScreenFragment() {
+        supportFragmentManager.popBackStack()
+    }
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.mainContainer).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+    private fun showSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(
+            window,
+            binding.mainContainer
+        ).show(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 }

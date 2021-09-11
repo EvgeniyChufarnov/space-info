@@ -49,6 +49,9 @@ class PictureOfADayViewModel @Inject constructor(
     private val _shareEvent = MutableLiveData<PictureOfADayEntity?>()
     val shareEvent: LiveData<PictureOfADayEntity?> = _shareEvent
 
+    private val _pictureClickedEvent = MutableLiveData<String?>()
+    val pictureClickedEvent: LiveData<String?> = _pictureClickedEvent
+
     init {
         _state.value = PictureOfADayScreenState.IDLE
         loadPictureOfADay(dateFormat.format(Date()))
@@ -104,6 +107,16 @@ class PictureOfADayViewModel @Inject constructor(
 
     fun onShareFinished() {
         _shareEvent.value = null
+    }
+
+    fun onPictureClicked() {
+        picture.value?.let {
+            _pictureClickedEvent.value = it.mediaPath
+        }
+    }
+
+    fun onPictureClickedFinished() {
+        _pictureClickedEvent.value = null
     }
 
     private fun delayToShowProgressBar() {
