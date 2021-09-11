@@ -1,10 +1,14 @@
 package com.example.spaceinfo.ui.pictureOfADay
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,9 +23,15 @@ import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val SHARE_INTENT_TYPE = "text/plain"
+private const val SHARED_IMAGE_VIEW_NAME = "full_screen_image"
 
 @AndroidEntryPoint
 class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
+
+    interface Contract {
+        fun showPictureFullScreen(path: String, sharedView: View, sharedViewName: String)
+    }
+
     private val binding: FragmentPictureOfADayBinding by viewBinding(FragmentPictureOfADayBinding::bind)
     private val viewModel: PictureOfADayViewModel by viewModels()
 
@@ -32,12 +42,19 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
+        postponeEnterTransition()
+
+        binding.pictureOfADayImageView.setOnClickListener {
+            viewModel.onPictureClicked()
+        }
+
         viewModel.picture.observe(viewLifecycleOwner, {
             when {
                 it.isImage() -> loadImage(it)
                 it.isVideo() -> {
                     binding.linkToAVideoImageView.text = it.mediaPath
                     setDescription(it)
+                    startPostponedEnterTransition()
                 }
             }
         })
@@ -52,6 +69,18 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
             if (pictureOfADay != null) {
                 share(pictureOfADay)
                 viewModel.onShareFinished()
+            }
+        })
+
+        viewModel.pictureClickedEvent.observe(viewLifecycleOwner, { path ->
+            if (path != null) {
+                (requireActivity() as Contract).showPictureFullScreen(
+                    path,
+                    binding.pictureOfADayImageView,
+                    SHARED_IMAGE_VIEW_NAME
+                )
+
+                viewModel.onPictureClickedFinished()
             }
         })
 
@@ -136,9 +165,11 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
                     setDescription(pictureOfADay)
 
                     viewModel.onPictureReady()
+                    startPostponedEnterTransition()
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {
+                    startPostponedEnterTransition()
                 }
             })
     }
@@ -146,5 +177,13 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
     private fun setDescription(pictureOfADay: PictureOfADayEntity) {
         binding.titleTextView.text = pictureOfADay.title
         binding.descriptionTextView.text = pictureOfADay.explanation
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (requireActivity() !is Contract) {
+            throw IllegalStateException("Activity must implement PictureOfADay.Contract")
+        }
     }
 }
