@@ -20,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.FragmentPictureOfADayBinding
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
+import com.example.spaceinfo.ui.toFirstLettersColoredSpannable
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val SHARE_INTENT_TYPE = "text/plain"
@@ -175,7 +176,9 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
     }
 
     private fun setDescription(pictureOfADay: PictureOfADayEntity) {
-        binding.titleTextView.text = pictureOfADay.title
+        binding.titleTextView.text = pictureOfADay.title.toFirstLettersColoredSpannable(
+            resources.getColor(R.color.pink_600, null)
+        )
         binding.descriptionTextView.text = pictureOfADay.explanation
     }
 
