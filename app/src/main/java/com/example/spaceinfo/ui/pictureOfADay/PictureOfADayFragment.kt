@@ -53,7 +53,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
             when {
                 it.isImage() -> loadImage(it)
                 it.isVideo() -> {
-                    binding.linkToAVideoImageView.text = it.mediaPath
+                    binding.linkToVideoImageView.text = it.mediaPath
                     setDescription(it)
                     startPostponedEnterTransition()
                 }
@@ -96,7 +96,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
                     binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
-                    binding.linkToAVideoImageView.isVisible = false
+                    binding.linkToVideoImageView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = true
                 }
                 PictureOfADayScreenState.SHOW_VIDEO -> {
@@ -104,7 +104,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = false
-                    binding.linkToAVideoImageView.isVisible = true
+                    binding.linkToVideoImageView.isVisible = true
                 }
                 PictureOfADayScreenState.ERROR -> {
                     binding.loadingProgressBar.isVisible = false
