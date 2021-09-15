@@ -20,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.FragmentPictureOfADayBinding
 import com.example.spaceinfo.domain.data.entities.PictureOfADayEntity
+import com.example.spaceinfo.ui.toFirstLettersColoredSpannable
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val SHARE_INTENT_TYPE = "text/plain"
@@ -52,7 +53,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
             when {
                 it.isImage() -> loadImage(it)
                 it.isVideo() -> {
-                    binding.linkToAVideoImageView.text = it.mediaPath
+                    binding.linkToVideoImageView.text = it.mediaPath
                     setDescription(it)
                     startPostponedEnterTransition()
                 }
@@ -95,7 +96,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
                     binding.loadingProgressBar.isVisible = false
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
-                    binding.linkToAVideoImageView.isVisible = false
+                    binding.linkToVideoImageView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = true
                 }
                 PictureOfADayScreenState.SHOW_VIDEO -> {
@@ -103,7 +104,7 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
                     binding.contentLayout.isVisible = true
                     binding.errorTextView.isVisible = false
                     binding.pictureOfADayImageView.isVisible = false
-                    binding.linkToAVideoImageView.isVisible = true
+                    binding.linkToVideoImageView.isVisible = true
                 }
                 PictureOfADayScreenState.ERROR -> {
                     binding.loadingProgressBar.isVisible = false
@@ -175,7 +176,9 @@ class PictureOfADayFragment : Fragment(R.layout.fragment_picture_of_a_day) {
     }
 
     private fun setDescription(pictureOfADay: PictureOfADayEntity) {
-        binding.titleTextView.text = pictureOfADay.title
+        binding.titleTextView.text = pictureOfADay.title.toFirstLettersColoredSpannable(
+            resources.getColor(R.color.pink_600, null)
+        )
         binding.descriptionTextView.text = pictureOfADay.explanation
     }
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
+import com.example.spaceinfo.ROVERS_NAMES
 import com.example.spaceinfo.databinding.FragmentPicturesFromMarsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,19 +30,17 @@ class PicturesFromMarsFragment : Fragment(R.layout.fragment_pictures_from_mars) 
     )
     private val viewModel: PicturesFromMarsViewModel by viewModels()
 
+    private lateinit var adapter: PicturesFromMarsAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
 
-        arguments?.run {
-            if (containsKey(ROVER_NAME_KEY)) {
-                viewModel.roverName = getString(ROVER_NAME_KEY)
-            }
-        }
+        viewModel.roverName = arguments?.getString(ROVER_NAME_KEY) ?: ROVERS_NAMES.first()
 
         viewModel.pictures.observe(viewLifecycleOwner, {
-            (binding.picturesFromMarsRecyclerView.adapter as PicturesFromMarsAdapter).setData(it)
+            adapter.setData(it)
         })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, {
@@ -80,7 +79,8 @@ class PicturesFromMarsFragment : Fragment(R.layout.fragment_pictures_from_mars) 
     }
 
     private fun initRecyclerView() {
-        binding.picturesFromMarsRecyclerView.adapter = PicturesFromMarsAdapter()
+        adapter = PicturesFromMarsAdapter()
+        binding.picturesFromMarsRecyclerView.adapter = adapter
         binding.picturesFromMarsRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,

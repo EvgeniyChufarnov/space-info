@@ -68,7 +68,7 @@
                     android:transitionName="picture_of_a_day" />
 
                 <TextView
-                    android:id="@+id/link_to_a_video_image_view"
+                    android:id="@+id/link_to_video_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autoLink="web"
