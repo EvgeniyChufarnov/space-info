@@ -19,7 +19,6 @@ import com.example.spaceinfo.ui.picturesFromMarsContainer.PicturesFromMarsContai
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
-
 private const val NIGHT_THEME_PREFERENCES_KEY = "night theme preferences"
 private const val NIGHT_THEME_KEY = "night theme"
 
@@ -154,7 +153,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun showPictureFullScreen(path: String, sharedView: View, sharedViewName: String) {
-        hideSystemUI()
+        hideSystemUI(binding.mainContainer)
         binding.bottomAppBar.performHide()
 
         supportFragmentManager.beginTransaction()
@@ -169,28 +168,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun exitFullScreenState() {
-        showSystemUI()
+        showSystemUI(binding.mainContainer)
         binding.bottomAppBar.performShow()
     }
 
     override fun closeFullScreenFragment() {
         supportFragmentManager.popBackStack()
-    }
-
-    private fun hideSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.mainContainer).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
-            controller.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-    }
-
-    private fun showSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(
-            window,
-            binding.mainContainer
-        ).show(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 }
