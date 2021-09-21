@@ -22,7 +22,7 @@ fun String.toFirstLettersColoredSpannable(color: Int): Spannable {
     return spannable
 }
 
-fun AppCompatActivity.hideSystemUI(view: View) {
+fun AppCompatActivity.hideSystemUi(view: View) {
     WindowCompat.setDecorFitsSystemWindows(window, false)
     WindowInsetsControllerCompat(window, view).let { controller ->
         controller.hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
@@ -31,7 +31,7 @@ fun AppCompatActivity.hideSystemUI(view: View) {
     }
 }
 
-fun AppCompatActivity.showSystemUI(view: View) {
+fun AppCompatActivity.showSystemUi(view: View) {
     WindowCompat.setDecorFitsSystemWindows(window, true)
     WindowInsetsControllerCompat(
         window,

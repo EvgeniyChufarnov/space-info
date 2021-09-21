@@ -10,7 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.ActivitySplashScreenBinding
 
-private const val splash_timeout = 2000L
+private const val SPLASH_TIMEOUT = 2000L
 
 class SplashScreenActivity : AppCompatActivity(R.layout.activity_splash_screen) {
     private val binding: ActivitySplashScreenBinding by viewBinding(ActivitySplashScreenBinding::bind)
@@ -20,10 +20,10 @@ class SplashScreenActivity : AppCompatActivity(R.layout.activity_splash_screen) 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        hideSystemUI(binding.splashScreen)
+        hideSystemUi(binding.splashScreen)
 
         if (savedInstanceState == null) {
-            handler.postDelayed(splash_timeout) {
+            handler.postDelayed(SPLASH_TIMEOUT) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }

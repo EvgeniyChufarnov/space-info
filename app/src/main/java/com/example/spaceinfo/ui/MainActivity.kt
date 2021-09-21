@@ -5,9 +5,6 @@ import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -153,7 +150,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun showPictureFullScreen(path: String, sharedView: View, sharedViewName: String) {
-        hideSystemUI(binding.mainContainer)
+        hideSystemUi(binding.mainContainer)
         binding.bottomAppBar.performHide()
 
         supportFragmentManager.beginTransaction()
@@ -168,7 +165,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun exitFullScreenState() {
-        showSystemUI(binding.mainContainer)
+        showSystemUi(binding.mainContainer)
         binding.bottomAppBar.performShow()
     }
 
