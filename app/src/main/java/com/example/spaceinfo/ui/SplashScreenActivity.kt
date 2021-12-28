@@ -10,7 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
 import com.example.spaceinfo.databinding.ActivitySplashScreenBinding
 
-private const val SPLASH_TIMEOUT = 2000L
+private const val SPLASH_TIMEOUT = 100L
 
 class SplashScreenActivity : AppCompatActivity(R.layout.activity_splash_screen) {
     private val binding: ActivitySplashScreenBinding by viewBinding(ActivitySplashScreenBinding::bind)

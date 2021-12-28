@@ -1,7 +1,8 @@
 package com.example.spaceinfo.ui
 
 import android.text.Spannable
-import android.text.SpannableStringBuilder
+import android.text.SpannableString
+import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,18 +10,13 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-fun String.toFirstLettersColoredSpannable(color: Int): Spannable {
-    val spannable = SpannableStringBuilder(this)
-    val chars = toCharArray()
-
-    for (i in indices) {
-        if (i == 0 || chars[i - 1] == ' ' && chars[i].isLetter()) {
-            spannable.setSpan(ForegroundColorSpan(color), i, i + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+fun String.toFirstLettersColoredSpannable(color: Int): CharSequence = TextUtils.concat(*split(" ").map {
+    SpannableString("$it ").apply {
+        if (first().isLetter()) {
+            setSpan(ForegroundColorSpan(color), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         }
     }
-
-    return spannable
-}
+}.toTypedArray()).trim()
 
 fun AppCompatActivity.hideSystemUi(view: View) {
     WindowCompat.setDecorFitsSystemWindows(window, false)
