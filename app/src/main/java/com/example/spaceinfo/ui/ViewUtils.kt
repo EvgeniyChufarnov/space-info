@@ -9,6 +9,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import java.util.regex.Pattern
+
+private val EMAIL_PATTERN = Pattern.compile(
+    "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+            "\\@" +
+            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+            "(" +
+            "\\." +
+            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+            ")+"
+)
+
+fun isValidEmail(email: CharSequence?): Boolean {
+    return email != null && EMAIL_PATTERN.matcher(email).matches()
+}
 
 fun String.toFirstLettersColoredSpannable(color: Int): CharSequence = TextUtils.concat(*split(" ").map {
     SpannableString("$it ").apply {
