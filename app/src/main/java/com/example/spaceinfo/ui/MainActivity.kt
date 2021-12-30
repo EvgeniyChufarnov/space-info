@@ -5,9 +5,6 @@ import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -18,7 +15,6 @@ import com.example.spaceinfo.ui.pictureOfADayFullscreen.FullScreenPictureFragmen
 import com.example.spaceinfo.ui.picturesFromMarsContainer.PicturesFromMarsContainerFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
-
 
 private const val NIGHT_THEME_PREFERENCES_KEY = "night theme preferences"
 private const val NIGHT_THEME_KEY = "night theme"
@@ -154,7 +150,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun showPictureFullScreen(path: String, sharedView: View, sharedViewName: String) {
-        hideSystemUI()
+        hideSystemUi(binding.mainContainer)
         binding.bottomAppBar.performHide()
 
         supportFragmentManager.beginTransaction()
@@ -169,28 +165,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), PopupMenu.OnMenu
     }
 
     override fun exitFullScreenState() {
-        showSystemUI()
+        showSystemUi(binding.mainContainer)
         binding.bottomAppBar.performShow()
     }
 
     override fun closeFullScreenFragment() {
         supportFragmentManager.popBackStack()
-    }
-
-    private fun hideSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.mainContainer).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
-            controller.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-    }
-
-    private fun showSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(
-            window,
-            binding.mainContainer
-        ).show(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 }
