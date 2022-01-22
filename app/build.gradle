@@ -112,4 +112,7 @@ dependencies {
 
     // kaspresso
     androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.4.0'
+
+    // ui automator
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
