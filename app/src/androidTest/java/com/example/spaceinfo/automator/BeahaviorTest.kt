@@ -15,6 +15,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.example.spaceinfo.R
+import com.geekbrains.tests.TIMEOUT
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,10 +68,6 @@ class BehaviorTest {
         fullScreenImageView.click()
 
         onView(withId(R.id.fullscreen_container)).check(doesNotExist())
-    }
-
-    companion object {
-        private const val TIMEOUT = 5000L
     }
 }
 
