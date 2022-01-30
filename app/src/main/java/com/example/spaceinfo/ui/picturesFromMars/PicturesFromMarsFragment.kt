@@ -5,17 +5,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.spaceinfo.R
 import com.example.spaceinfo.ROVERS_NAMES
 import com.example.spaceinfo.databinding.FragmentPicturesFromMarsBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.spaceinfo.di.SpaceInfoApplication
 
 private const val ROVER_NAME_KEY = "rover_name"
 
-@AndroidEntryPoint
 class PicturesFromMarsFragment : Fragment(R.layout.fragment_pictures_from_mars) {
     companion object {
         fun getInstance(roverName: String) = PicturesFromMarsFragment().apply {
@@ -28,12 +27,16 @@ class PicturesFromMarsFragment : Fragment(R.layout.fragment_pictures_from_mars) 
     private val binding: FragmentPicturesFromMarsBinding by viewBinding(
         FragmentPicturesFromMarsBinding::bind
     )
-    private val viewModel: PicturesFromMarsViewModel by viewModels()
+    private lateinit var viewModel: PicturesFromMarsViewModel
 
     private lateinit var adapter: PicturesFromMarsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this, PicturesFromMarsViewModelFactory(
+            (requireActivity().application as SpaceInfoApplication).marsPicturesRepository
+        ))[PicturesFromMarsViewModel::class.java]
 
         initRecyclerView()
 
