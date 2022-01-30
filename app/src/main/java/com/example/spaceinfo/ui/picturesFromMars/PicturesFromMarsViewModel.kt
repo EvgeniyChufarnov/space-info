@@ -1,23 +1,17 @@
 package com.example.spaceinfo.ui.picturesFromMars
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.spaceinfo.LOADING_BAR_DELAY
 import com.example.spaceinfo.domain.data.ResultWrapper
 import com.example.spaceinfo.domain.repository.MarsPicturesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 enum class PicturesFromMarsScreenState {
     SHOW_PICTURES, LOADING, ERROR, IDLE
 }
 
-@HiltViewModel
-class PicturesFromMarsViewModel @Inject constructor(
+class PicturesFromMarsViewModel(
     private val marsPicturesRepository: MarsPicturesRepository
 ) : ViewModel() {
     var roverName: String? = null
@@ -64,5 +58,11 @@ class PicturesFromMarsViewModel @Inject constructor(
                 _state.value = PicturesFromMarsScreenState.LOADING
             }
         }
+    }
+}
+
+class PicturesFromMarsViewModelFactory(private val repo: MarsPicturesRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return PicturesFromMarsViewModel(repo) as T
     }
 }
