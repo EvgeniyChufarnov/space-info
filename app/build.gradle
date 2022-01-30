@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.example.spaceinfo"
         minSdk 23
-        targetSdk 30
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -123,4 +123,10 @@ dependencies {
 
     // ui automator
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
+    // fragment test
+    debugImplementation "androidx.fragment:fragment-testing:1.4.1"
+
+    //RecyclerView
+    debugImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
 }
